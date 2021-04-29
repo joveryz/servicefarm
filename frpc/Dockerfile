@@ -14,6 +14,7 @@ RUN cd /root \
     &&  cp frpc.ini /etc/frp \
     &&  cd /root \
     &&  rm ${FRP_TGZ} \
-    &&  rm -rf {FRP_FOLDER}/ 
+    &&  rm -rf {FRP_FOLDER}/ \
+    &&  touch 123
 
 ENTRYPOINT /usr/bin/frpc -c /etc/frp/frpc.ini
