@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
 services:
   grafana:
     image: grafana/grafana
@@ -27,3 +27,20 @@ services:
       - "9090:9090"
     volumes:
       - /home/ztb5129/service/prometheus:/prometheus_root
+  watchtower:
+    image: containrrr/watchtower
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_NOTIFICATIONS=email
+      - WATCHTOWER_NOTIFICATION_EMAIL_FROM=admin@redebug.com
+      - WATCHTOWER_NOTIFICATION_EMAIL_TO=ztb5129@live.com
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER=smtp.exmail.qq.com
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=465
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER=admin@redebug.com
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=/run/secrets/smtp_pwd
+    secrets:
+      - smtp_pwd
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

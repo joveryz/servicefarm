@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
 services:
   frpc_azure:
     image: ztb5129/frpc
