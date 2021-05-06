@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  grafana:
+    image: grafana/grafana
+    restart: always
+    user: root
+    ports:
+      - "3000:3000"
+    volumes:
+      - /home/ztb5129/service/grafana/data:/var/lib/grafana
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    user: root
+    environment:
+      - TZ=Asia/Shanghai
+    entrypoint: /bin/prometheus
+    command: >
+      --config.file=/prometheus_root/config/prometheus.yml
+      --web.read-timeout=5m
+      --web.max-connections=10
+      --storage.tsdb.retention=30d
+      --storage.tsdb.path=/prometheus_root/data
+      --query.max-concurrency=20
+      --query.timeout=2m
+    ports:
+      - "9090:9090"
+    volumes:
+      - /home/ztb5129/service/prometheus:/prometheus_root
