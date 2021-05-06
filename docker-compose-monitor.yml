@@ -44,3 +44,6 @@ services:
       - smtp_pwd
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+secrets:
+  smtp_pwd:
+    external: true
