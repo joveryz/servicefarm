@@ -10,7 +10,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN cd /root \
-    &&  wget --no-check-certificate -c https://github.com/soundcloud/ipmi_exporter/releases/download/v${IPMIEXPORTER_VERSION}/${IPMIEXPORTER_TGZ} \
+    &&  wget --no-check-certificate -c https://github.com/prometheus-community/ipmi_exporter/releases/download/v${IPMIEXPORTER_VERSION}/${IPMIEXPORTER_TGZ} \
     &&  tar zxvf ${IPMIEXPORTER_TGZ} \
     &&  cd ${IPMIEXPORTER_FOLDER}/ \
     &&  cp ipmi_exporter /usr/bin/ \
