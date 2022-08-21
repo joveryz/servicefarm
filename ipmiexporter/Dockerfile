@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 ENV IPMIEXPORTER_VERSION 1.6.1
 ENV IPMIEXPORTER_ARCHT linux-amd64
-ENV IPMIEXPORTER_FOLDER ipmi_exporter-v${IPMIEXPORTER_VERSION}.${IPMIEXPORTER_ARCHT}
+ENV IPMIEXPORTER_FOLDER ipmi_exporter-${IPMIEXPORTER_VERSION}.${IPMIEXPORTER_ARCHT}
 ENV IPMIEXPORTER_TGZ ${IPMIEXPORTER_FOLDER}.tar.gz
 
 RUN apt-get update \
@@ -10,7 +10,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN cd /root \
-    &&  wget --no-check-certificate -c https://github.com/prometheus-community/ipmi_exporter/releases/download/${IPMIEXPORTER_VERSION}/${IPMIEXPORTER_TGZ} \
+    &&  wget --no-check-certificate -c https://github.com/prometheus-community/ipmi_exporter/releases/download/v${IPMIEXPORTER_VERSION}/${IPMIEXPORTER_TGZ} \
     &&  tar zxvf ${IPMIEXPORTER_TGZ} \
     &&  cd ${IPMIEXPORTER_FOLDER}/ \
     &&  cp ipmi_exporter /usr/bin/ \
