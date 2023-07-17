@@ -1,0 +1,13 @@
+[Unit]
+Description=Miio Exporter Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/bin/python3 /home/ztb5129/service-data/miio-exporter/miio-exporter.py
+
+[Install]
+WantedBy=multi-user.target
