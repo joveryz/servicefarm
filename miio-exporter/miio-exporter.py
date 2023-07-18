@@ -17,15 +17,16 @@ properties = [
 
 config = json.load(open("/etc/config.json"))
 
-devices = []
+devices = {}
 
-for device in config["devices"]:
-    devices.append(Device(ip=device["ip"], token=device["token"]))
+for device_conf in config["devices"]:
+    devices[device_conf["label"]] = Device(ip=device_conf["ip"], token=device_conf["token"])
 
 if __name__ == "__main__":
     start_http_server(8006)
     while True:
-        for device in devices:
+        for device_label in devices:
+            device = devices[device_label]
             if device.token is None or device.token == "":
                 print("No token for device, will skip, ip: " + device.ip)
                 continue
@@ -36,10 +37,10 @@ if __name__ == "__main__":
                 time.sleep(5)
                 continue
 
-            metrics_power.labels(instance=device.ip, label=device.label).set(
+            metrics_power.labels(instance=device.ip, label=device_label).set(
                 ret[0]["value"]
             )
-            metrics_temp.labels(instance=device.ip, label=device.label).set(
+            metrics_temp.labels(instance=device.ip, label=device_label).set(
                 ret[1]["value"]
             )
             time.sleep(5)
