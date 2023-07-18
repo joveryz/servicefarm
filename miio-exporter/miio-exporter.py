@@ -43,4 +43,4 @@ if __name__ == "__main__":
             metrics_temp.labels(instance=device.ip, label=device_label).set(
                 ret[1]["value"]
             )
-            time.sleep(5)
+        time.sleep(5)
