@@ -1,4 +1,5 @@
 from miio.device import Device
+import json
 import time
 from prometheus_client import Gauge, start_http_server
 
@@ -14,29 +15,31 @@ properties = [
     {"did": "MYDID", "siid": 12, "piid": 2},
 ]
 
-mi_plug_v3_device_server = Device(
-    ip="172.16.69.181", token="1b30fc9dfeb31c5027b8bf0ebf159385"
-)
-mi_plug_v3_device_bedroom = Device(
-    ip="172.16.69.182", token="e6a7c2369ed54ba84ade78c32d1944da"
-)
+config = json.load(open("/etc/config.json"))
 
+devices = []
+
+for device in config["devices"]:
+    devices.append(Device(ip=device["ip"], token=device["token"]))
 
 if __name__ == "__main__":
     start_http_server(8006)
     while True:
-        ret = mi_plug_v3_device_server.send("get_properties", properties)
-        metrics_power.labels(instance="172.16.69.217", label="server").set(
-            ret[0]["value"]
-        )
-        metrics_temp.labels(instance="172.16.69.217", label="server").set(
-            ret[1]["value"]
-        )
-        ret = mi_plug_v3_device_bedroom.send("get_properties", properties)
-        metrics_power.labels(instance="172.16.69.216", label="bedroom").set(
-            ret[0]["value"]
-        )
-        metrics_temp.labels(instance="172.16.69.216", label="bedroom").set(
-            ret[1]["value"]
-        )
-        time.sleep(5)
+        for device in devices:
+            if device.token is None or device.token == "":
+                print("No token for device, will skip, ip: " + device.ip)
+                continue
+            try:
+                ret = device.send("get_properties", properties)
+            except:
+                print("Error getting data from device, ip: " + device.ip)
+                time.sleep(5)
+                continue
+
+            metrics_power.labels(instance=device.ip, label=device.label).set(
+                ret[0]["value"]
+            )
+            metrics_temp.labels(instance=device.ip, label=device.label).set(
+                ret[1]["value"]
+            )
+            time.sleep(5)
